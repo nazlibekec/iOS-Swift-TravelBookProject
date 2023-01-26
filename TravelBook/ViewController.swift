@@ -8,13 +8,16 @@
 import UIKit
 import MapKit
 import CoreLocation
+import CoreData
 
 class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate{
 
     var locationManager = CLLocationManager()
     
     @IBOutlet weak var mapView: MKMapView!
-   
+    @IBOutlet weak var nameText: UITextField!
+    @IBOutlet weak var commentText: UITextField!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +36,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         //Kullanıcının ne kadar süreyle bastığını belirleme.
         
-        gestureRecognizer.minimumPressDuration = 3
+        gestureRecognizer.minimumPressDuration = 2
         
         mapView.addGestureRecognizer(gestureRecognizer)
         
@@ -51,8 +54,8 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             //Pin oluştur.
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchedCoordinate
-            annotation.title = "New Annotation"
-            annotation.subtitle = "Travel Book"
+            annotation.title = nameText.text
+            annotation.subtitle = commentText.text
             self.mapView.addAnnotation(annotation)
             
         }
@@ -75,6 +78,8 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
     }
     
+    @IBAction func saveButtonClicked(_ sender: Any) {
+    }
     
     
 }
