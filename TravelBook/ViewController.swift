@@ -13,6 +13,9 @@ import CoreData
 class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate{
 
     var locationManager = CLLocationManager()
+    var choosenLatitude = Double()
+    var choosenLongitude = Double()
+
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var nameText: UITextField!
@@ -60,6 +63,10 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             //Dokunulan noktanın koordinatlarını al.
             let touchedCoordinate = self.mapView.convert(touchedPoint, toCoordinateFrom: self.mapView)
             
+            //her dokunduğunda enlem boylam değişkenlerine atanır.
+            choosenLatitude = touchedCoordinate.latitude
+            choosenLongitude = touchedCoordinate.longitude
+            
             //Pin oluştur.
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchedCoordinate
@@ -89,8 +96,28 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     
     @IBAction func saveButtonClicked(_ sender: Any) {
         
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        
+        let newPlace = NSEntityDescription.insertNewObject(forEntityName: "Places", into: context)
         
         
+        //boş olduğunda alert gösterme işlemi yaptır.
+        
+        newPlace.setValue(nameText.text, forKey: "title")
+        newPlace.setValue(commentText.text, forKey: "subtitle")
+        newPlace.setValue(choosenLatitude, forKey: "latitude")
+        newPlace.setValue(choosenLongitude, forKey: "longitude")
+        newPlace.setValue(UUID(), forKey: "id")
+        
+        do {
+            try context.save()
+            print("success")
+        } catch {
+            print("error")
+        }
+        
+    
     }
     
     
