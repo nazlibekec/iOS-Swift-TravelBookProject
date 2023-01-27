@@ -43,6 +43,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         mapView.addGestureRecognizer(gestureRecognizer)
         
+        //Hide Keyboard
         
         let gestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(gestureRecognizer2)
@@ -98,28 +99,48 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
-        
         let newPlace = NSEntityDescription.insertNewObject(forEntityName: "Places", into: context)
         
         
-        //boş olduğunda alert gösterme işlemi yaptır.
-        
-        newPlace.setValue(nameText.text, forKey: "title")
-        newPlace.setValue(commentText.text, forKey: "subtitle")
-        newPlace.setValue(choosenLatitude, forKey: "latitude")
-        newPlace.setValue(choosenLongitude, forKey: "longitude")
-        newPlace.setValue(UUID(), forKey: "id")
-        
-        do {
-            try context.save()
-            print("success")
-        } catch {
-            print("error")
+        if nameText.text == "" {
+            makeAlert(titleInput: "Error!", messageInput: "Name not found!")
+           
+            
+        } else if commentText.text == ""{
+            makeAlert(titleInput: "Error!", messageInput: "Comment not found!")
+            
+        } else if choosenLatitude == 0 && choosenLongitude == 0 {
+            makeAlert(titleInput: "Error!", messageInput: "Place not found!")
+            
+        } else {
+                        
+            newPlace.setValue(nameText.text, forKey: "title")
+            newPlace.setValue(commentText.text, forKey: "subtitle")
+            newPlace.setValue(choosenLatitude, forKey: "latitude")
+            newPlace.setValue(choosenLongitude, forKey: "longitude")
+            newPlace.setValue(UUID(), forKey: "id")
+            
+            do {
+                try context.save()
+                print("success")
+            } catch {
+                print("error")
+            }
+            
         }
         
+    }
     
+    func makeAlert(titleInput: String, messageInput: String) {
+    let alert = UIAlertController(title: titleInput, message: messageInput, preferredStyle: UIAlertController.Style.alert)
+    let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+    alert.addAction(okButton)
+    self.present(alert, animated: true)
+
     }
     
     
 }
+
+
 
