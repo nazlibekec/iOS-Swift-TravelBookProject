@@ -40,6 +40,15 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         mapView.addGestureRecognizer(gestureRecognizer)
         
+        
+        let gestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(gestureRecognizer2)
+        
+        
+    }
+    
+    @objc func hideKeyboard(){
+        view.endEditing(true)
     }
 
     @objc func chooseLocation(gestureRecognizer: UILongPressGestureRecognizer) {
@@ -79,6 +88,9 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     }
     
     @IBAction func saveButtonClicked(_ sender: Any) {
+        
+        
+        
     }
     
     
