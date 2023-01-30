@@ -166,6 +166,10 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                 print("error")
             }
         }
+        
+        //kaydettikten sonra listeye geri dönme işlemi.
+        NotificationCenter.default.post(name: NSNotification.Name("newPlace"), object: nil)
+        navigationController?.popViewController(animated: true)
     }
     
         @objc func makeAlert(titleInput: String, messageInput: String) {
@@ -174,9 +178,8 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             alert.addAction(okButton)
             self.present(alert, animated: true)
 
+            
     }
-    
-    
 }
 
 
