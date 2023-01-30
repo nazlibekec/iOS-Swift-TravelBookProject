@@ -14,6 +14,8 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     var titleArray = [String]()
     var idArray = [UUID]()
+    var choosenTitle = ""
+    var choosenID : UUID?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +64,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @objc func addButtonClicked() {
+        choosenTitle = ""
         performSegue(withIdentifier: "toViewController", sender: nil)
     }
     
@@ -73,5 +76,24 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let cell = UITableViewCell()
         cell.textLabel?.text = titleArray[indexPath.row]
         return cell
+    }
+    
+    
+    //verileri çektiğimiz fonksiyonlar
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //üstüne tıklanan title ı getir
+        choosenTitle = titleArray[indexPath.row]
+        choosenID = idArray[indexPath.row]
+        
+        performSegue(withIdentifier: "toViewController", sender: nil)
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toViewController"{
+            let destinationVC = segue.destination as! ViewController
+            destinationVC.selectedTitle = choosenTitle
+            destinationVC.selectedID = choosenID
+        }
+           
     }
 }
