@@ -78,9 +78,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return cell
     }
     
-    
-    //verileri çektiğimiz fonksiyonlar
-    
+    //verileri çektiğimiz (2) fonksiyonlar
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //üstüne tıklanan title ı getir
         choosenTitle = titleArray[indexPath.row]
@@ -94,6 +92,45 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
             destinationVC.selectedTitle = choosenTitle
             destinationVC.selectedID = choosenID
         }
-           
+    }
+    
+    // Delete
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            //Core Data dan veriyi bulup silme işlemi.
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = appDelegate.persistentContainer.viewContext
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Places")
+            let idString = idArray[indexPath.row].uuidString
+            
+            fetchRequest.predicate = NSPredicate(format: "id = %@", idString)
+            fetchRequest.returnsObjectsAsFaults = false
+            do {
+                let results = try context.fetch(fetchRequest)
+                if results.count > 0 {
+                    for result in results as! [NSManagedObject]{
+                        if let id = result.value(forKey: "id") as? UUID{
+                            if id == idArray[indexPath.row] {
+                                context.delete(result)
+                                // dizileri temizle.
+                                titleArray.remove(at: indexPath.row)
+                                idArray.remove(at: indexPath.row)
+                                //tableview ın son halini göster
+                                self.tableView.reloadData()
+                                do {
+                                    try context.save()
+                                } catch {
+                                    print("error")
+                                }
+                                // aradığımı bulup siliyorsam for loop u durdur demek.
+                                break
+                            }
+                        }
+                    }
+                }
+            } catch{
+                print("error")
+            }
+        }
     }
 }
