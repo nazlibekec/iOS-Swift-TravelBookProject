@@ -25,6 +25,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var nameText: UITextField!
     @IBOutlet weak var commentText: UITextField!
+    @IBOutlet weak var saveButtonClicked: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +48,9 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         view.addGestureRecognizer(gestureRecognizer2)
         
         if selectedTitle != "" {
+            
+            saveButtonClicked.isHidden = true
+            
             //CoreData
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let context = appDelegate.persistentContainer.viewContext
@@ -93,13 +97,9 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             } catch {
                 print("error")
             }
-          
-            
-            
         } else {
             //Add New Data
         }
-        
     }
     
     @objc func hideKeyboard(){
