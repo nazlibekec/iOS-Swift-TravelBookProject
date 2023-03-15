@@ -2,7 +2,6 @@
 
 - UIKit
 - Coredata
-- Lifecycle (viewWillAppear)
 - UITableView (UITableViewDelegate, UITableViewDataSource)
 - Segue
 - IndexPath
